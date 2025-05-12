@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice to Sign Language</title>
+    <style>
+        /* Global body styling */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: white;
+            display: flex;
+            background-image: url('sound6.jpg'); 
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header styling */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: white;
+            z-index: 10;
+            padding: 0 20px;
+        }
+
+        .header .logo-image {
+            width: 100px;
+            height: auto;
+        }
+
+        .header .logo {
+            font-size: 30px;
+            text-align: center;
+            border-bottom: 2px solid yellow;
+            flex-grow: 1;
+        }
+
+        .header .links {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+
+        .header a {
+            color: black;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            position: relative;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .header a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, yellow, green);
+            transition: width 0.3s ease;
+        }
+
+        .header a:hover::after {
+            width: 100%;
+        }
+
+        /* Button container */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        button {
+            padding: 30px 100px;
+            font-size: 25px;
+            background-color: yellow;
+            color: black;
+            border: 2px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        button:hover {
+            background-color: black;
+            color: yellow;
+        }
+
+        /* Transcription text */
+        #transcription {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        /* Gesture images container (grey box) */
+        .gesture-images {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Center the images inside the box */
+            gap: 10px;
+            background-color: #d3d3d3; /* Light grey background */
+            border: 2px solid black; /* Black border */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Inner spacing */
+            margin: 20px auto; /* Center the box horizontally and add vertical spacing */
+            width: 80%; /* Flexible width, adjust as needed */
+            max-width: 1000px; /* Maximum width to prevent it from getting too wide */
+            min-height: 100px; /* Minimum height to ensure the box is visible even with no images */
+        }
+
+        .gesture-images img {
+            width: 80px;
+            height: 80px;
+            border: 2px solid black;
+            border-radius: 5px;
+            object-fit: cover; /* Ensure images fit nicely */
+        }
+    </style>
+</head>
+<body>
+     
+    <!-- Header Section -->
+    <header class="header">
+        <img class="logo-image" src="thin.jpg" alt="Logo">
+        <div class="logo">Voice to Sign Language</div>
+        <div class="links">
+            <a href="main.html">Home</a>
+        </div>
+    </header>
+
+    <!-- Button Container -->
+    <div class="button-container">
+        <button onclick="startRecognition()">Start Recognition</button>
+        <button onclick="stopRecognition()">Stop Recognition</button>
+    </div>
+
+    <p id="transcription"></p>
+
+    <!-- Gesture Images -->
+    <div class="gesture-images" id="gesture-images"></div>
+
+    <script>
+        // Initialize speech recognition
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        
+        recognition.lang = 'en-US';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+        let recognizing = false;
+
+        // Mapping characters to sign language gesture images
+        const gestureImages = {
+            'A': 'images/Aa.jpg',
+            'B': 'images/B.jpg',
+            'C': 'images/C.jpg',
+            'D': 'images/D.jpg',
+            'E': 'images/E.jpg',
+            'F': 'images/F.jpg',
+            'G': 'images/G.jpg',
+            'H': 'images/H.jpg',
+            'I': 'images/I.jpg',
+            'J': 'images/J.jpg',
+            'K': 'images/K.jpg',
+            'L': 'images/L.jpg',
+            'M': 'images/M.jpg',
+            'N': 'images/N.jpg',
+            'O': 'images/O.jpg',
+            'P': 'images/P.jpg',
+            'Q': 'images/Q.jpg',
+            'R': 'images/R.jpg',
+            'S': 'images/S.jpg',
+            'T': 'images/T.jpg',
+            'U': 'images/U.jpg',
+            'V': 'images/V.jpg',
+            'W': 'images/W.jpg',
+            'X': 'images/X.jpg',
+            'Y': 'images/Y.jpg',
+            'Z': 'images/Z.jpg',
+        };
+
+        // Start the recognition process
+        function startRecognition() {
+            if (!recognizing) {
+                recognition.start();
+                recognizing = true;
+                document.getElementById('transcription').innerText = 'Listening...';
+            }
+        }
+
+        // Stop the recognition process
+        function stopRecognition() {
+            if (recognizing) {
+                recognition.stop();
+                recognizing = false;
+                document.getElementById('transcription').innerText += ' (Recognition stopped)';
+            }
+        }
+
+        // Handle the results
+        recognition.onresult = function(event) {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const result = event.results[i];
+                transcript += result[0].transcript;
+            }
+            document.getElementById('transcription').innerText = transcript;
+            displaySignLanguage(transcript);
+        };
+
+        // Function to display sign language images based on transcribed text
+        function displaySignLanguage(sentence) {
+            const imagesContainer = document.getElementById('gesture-images');
+            imagesContainer.innerHTML = '';
+
+            const words = sentence.split(' ');
+            words.forEach(word => {
+                for (let i = 0; i < word.length; i++) {
+                    const char = word.charAt(i).toUpperCase();
+                    const imgSrc = gestureImages[char];
+
+                    if (imgSrc) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = imgSrc;
+                        imgElement.alt = char;
+                        document.getElementById('gesture-images').appendChild(imgElement);
+                    }
+                }
+            });
+        }
+
+        // Handle errors
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error:', event.error);
+        };
+    </script>
+</body>
+</html>

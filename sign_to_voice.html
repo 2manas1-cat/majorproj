@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign to Speech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Include TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <style>
+        /* Global body styling */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: white;
+            display: flex;
+            background-image: url('sound6.jpg'); 
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header styling */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: white;
+            z-index: 10;
+            padding: 0 20px;
+        }
+
+        .header .logo-image {
+            width: 100px;
+            height: auto;
+        }
+
+        .header .logo {
+            font-size: 30px;
+            text-align: center;
+            border-bottom: 2px solid yellow;
+            flex-grow: 1;
+        }
+
+        .header .links {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+
+        .header a {
+            color: black;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            position: relative;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .header a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, yellow, green);
+            transition: width 0.3s ease;
+        }
+
+        .header a:hover::after {
+            width: 100%;
+        }
+
+        /* Main container for camera and result */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            padding-top: 80px; /* Account for fixed header */
+        }
+
+        /* Camera container */
+        .camera-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        #video {
+            border: 2px solid black;
+            border-radius: 10px;
+            width: 300px;
+            height: 200px;
+        }
+
+        /* Buttons */
+        button {
+            padding: 10px 30px;
+            font-size: 16px;
+            background-color: yellow;
+            color: black;
+            border: 2px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: black;
+            color: yellow;
+        }
+
+        /* Result text */
+        #result {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Result container (grey box) */
+        .result-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            background-color: #d3d3d3; /* Light grey background */
+            border: 2px solid black; /* Black border */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Inner spacing */
+            margin: 20px auto; /* Center the box horizontally */
+            width: 80%; /* Flexible width */
+            max-width: 600px; /* Maximum width */
+            min-height: 100px; /* Minimum height */
+        }
+
+        .result-container img {
+            width: 100px;
+            height: 100px;
+            border: 2px solid black;
+            border-radius: 5px;
+            object-fit: cover; /* Ensure image fits nicely */
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <img class="logo-image" src="thin.jpg" alt="Logo">
+        <div class="logo">Sign to Speech</div>
+        <div class="links">
+            <a href="main.html">Home</a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="camera-container">
+            <video id="video" autoplay></video>
+            <button onclick="startCamera()">Start Camera</button>
+            <button onclick="captureImage()">Capture Image</button>
+        </div>
+
+        <p id="result">Capture a sign language gesture to see the letter!</p>
+
+        <!-- Result Container -->
+        <div class="result-container" id="result-container">
+            <!-- Captured image and result will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Hidden Canvas for Capturing Image -->
+    <canvas id="canvas" style="display: none;"></canvas>
+    <script>
+        // Hashmap to map letters to sign language gesture images
+        const letterToSignMap = {
+            'A': 'images/Aa.jpg',
+            'B': 'images/B.jpg',
+            'C': 'images/C.jpg',
+            'D': 'images/D.jpg',
+            'E': 'images/E.jpg',
+            'F': 'images/F.jpg',
+            'G': 'images/G.jpg',
+            'H': 'images/H.jpg',
+            'I': 'images/I.jpg',
+            'K': 'images/K.jpg',
+            'L': 'images/L.jpg',
+            'HELLO': 'hello.jpg',
+            'M': 'images/M.jpg',
+            'N': 'images/N.jpg',
+            'O': 'images/O.jpg',
+            'P': 'images/P.jpg',
+            'Q': 'images/Q.jpg',
+            'R': 'images/R.jpg',
+            'S': 'images/S.jpg',
+            'T': 'images/T.jpg',
+            'U': 'images/U.jpg',
+            'V': 'images/V.jpg',
+            'W': 'images/W.jpg',
+            'X': 'images/X.jpg',
+            'Y': 'images/Y.jpg'
+        };
+    
+        let stream = null; // To store the camera stream
+        let model = null; // To store the pre-trained model
+    
+        // Load the pre-trained model when the page loads
+        async function loadModel() {
+            try {
+                // Load the model from the local directory
+                model = await tf.loadLayersModel('sign_language_model/model.json');
+                console.log('Model loaded successfully');
+            } catch (error) {
+                console.error('Error loading model:', error);
+                document.getElementById('result').innerText = 'Failed to load the model. Please check the console for details.';
+            }
+        }
+    
+        // Start the camera
+        function startCamera() {
+            const video = document.getElementById('video');
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(s => {
+                    stream = s;
+                    video.srcObject = stream;
+                })
+                .catch(err => {
+                    console.error('Camera error:', err);
+                    document.getElementById('result').innerText = 'Unable to access camera. Please allow camera access.';
+                });
+        }
+    
+        // Capture the image from the video feed and predict the letter
+        async function captureImage() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const resultContainer = document.getElementById('result-container');
+            const resultText = document.getElementById('result');
+    
+            // Set canvas dimensions to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+    
+            // Draw the current video frame on the canvas
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+            // Convert the canvas image to a data URL
+            const imageDataUrl = canvas.toDataURL('image/jpeg');
+    
+            // Clear previous content
+            resultContainer.innerHTML = '';
+    
+            // Display the captured image
+            const capturedImg = document.createElement('img');
+            capturedImg.src = imageDataUrl;
+            resultContainer.appendChild(capturedImg);
+    
+            // Predict the letter using the model
+            if (model) {
+                await loadModelAndPredict(imageDataUrl);
+            } else {
+                resultText.innerText = 'Model not loaded yet. Please wait...';
+            }
+        }
+    
+        // Predict the letter from the captured image
+        async function loadModelAndPredict(imageDataUrl) {
+            const resultText = document.getElementById('result');
+            try {
+                // Create an image element to process the captured image
+                const img = new Image();
+                img.src = imageDataUrl;
+    
+                img.onload = async () => {
+                    // Preprocess the image for MobileNetV2 (224x224, normalize to [-1, 1])
+                    const tensor = tf.browser.fromPixels(img)
+                        .resizeNearestNeighbor([224, 224]) // Resize to MobileNetV2 input size
+                        .toFloat()
+                        .sub(tf.scalar(127.5)) // Normalize to [-1, 1]
+                        .div(tf.scalar(127.5))
+                        .expandDims();
+    
+                    // Make a prediction
+                    const prediction = model.predict(tensor);
+                    const letterIndex = prediction.argMax(-1).dataSync()[0];
+                    // Map indices to letters (0=A, 1=B, ..., 23=Y, excluding J and Z)
+                    const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I','HELLO', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y'];
+                    const predictedLetter = letters[letterIndex];
+    
+                    // Display the result
+                    displayResult(predictedLetter);
+                };
+            } catch (error) {
+                console.error('Prediction error:', error);
+                resultText.innerText = 'Error predicting the letter. Please check the console for details.';
+            }
+        }
+    
+        // Display the result based on the predicted letter
+        function displayResult(letter) {
+            const resultContainer = document.getElementById('result-container');
+            const resultText = document.getElementById('result');
+    
+            if (letter && letterToSignMap[letter]) {
+                // Display the corresponding sign language image
+                const signImg = document.createElement('img');
+                signImg.src = letterToSignMap[letter];
+                signImg.alt = `Sign Language Letter ${letter}`;
+    
+                // Add the sign image below the captured image
+                resultContainer.appendChild(signImg);
+    
+                // Update the result text
+                resultText.innerText = `Detected Letter: ${letter}`;
+            } else {
+                resultText.innerText = 'Letter not recognized. Please try again.';
+            }
+        }
+    
+        // Stop the camera when the page is unloaded
+        window.onbeforeunload = () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        };
+    
+        // Load the model when the page loads
+        window.onload = () => {
+            loadModel();
+        };
+    </script>
+</body>
+</html>

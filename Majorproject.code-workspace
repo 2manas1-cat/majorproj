@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "Majorproject",
+			"path": "."
+		},
+		{
+			"name": "sign_language_model",
+			"path": "../../Downloads/sign_language_model"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Majorproject"
+	}
+}
