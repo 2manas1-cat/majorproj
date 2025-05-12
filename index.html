@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Hearing .in</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: rgb(255, 255, 255);
+            border-color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: transparent;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header .logo-image {
+            width: 100px;
+            height: auto;
+            margin-left: 0;
+        }
+
+        .header .logo {
+            font-size: 30px;
+            text-align: center;
+            border-bottom: 2px solid yellow;
+            margin-left: 100px;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .header .links {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            position: relative;
+        }
+
+        .header a {
+            color: black;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            position: relative;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .header a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, yellow, green);
+            transition: width 0.3s ease;
+        }
+
+        .header a:hover::after {
+            width: 100%;
+        }
+
+        .nav {
+            background: #49bcd3;
+            padding: 15px;
+            margin: 20px auto;
+            border: 5px solid black;
+            border-radius: 10px;
+            transition: background-color 1s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 80%;
+            max-width: 1200px;
+        }
+
+        .nav button {
+            margin: 10px;
+            padding: 12px 20px;
+            font-size: 18px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            border-bottom: 2px solid yellow;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .nav button:hover {
+            border-bottom: 2px solid yellow;
+            background: yellow;
+            color: black;
+        }
+
+        /* Two-column layout */
+        .content-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .column {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+/* Styling for each section box */
+.intro-section, .intro-section1, .vision-section, .impact-section {
+    padding: 30px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(144, 225, 202, 0.2);
+    position: relative;
+    border-color: yellow;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Specific background colors */
+.intro-section {
+   background-color: #000000;
+}
+
+.intro-section1 {
+    background-color: #000000; /* Black */
+}
+
+.vision-section {
+    background-color: #000000; /* Light Blue */
+}
+
+.impact-section {
+    background-color: #020202; /* White */
+}
+
+/* Overlay for readability */
+.intro-section::before, .intro-section1::before, .vision-section::before, .impact-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-color: yellow;
+    background: rgba(0, 0, 0, 0.2); /* Light overlay for depth */
+    z-index: 1;
+}
+
+/* Ensure content is above the overlay */
+.intro-section > *, .intro-section1 > *, .vision-section > *, .impact-section > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Hover effects */
+.intro-section:hover, .intro-section1:hover, .vision-section:hover, .impact-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Text colors for content boxes */
+.intro-section h2, .intro-section1 h2, .vision-section h2, .impact-section h2 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+}
+
+.intro-section p, .intro-section1 p, .vision-section p, .impact-section p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Slight shadow for readability */
+}
+
+/* Specific text colors */
+.intro-section h2 {
+    color: #ffea00; /* Black on yellow */
+}
+.intro-section p {
+    color: #333333; /* Dark gray on yellow */
+}
+
+.intro-section1 h2 {
+    color: #ffff00; /* Yellow on black */
+}
+.intro-section1 p {
+    color: #FFFFFF; /* White on black */
+}
+
+.vision-section h2 {
+    color: #ffee04; /* Black on light blue */
+}
+.vision-section p {
+    color: #ffffff; /* Dark gray on light blue */
+}
+
+.impact-section h2 {
+    color: #f2ff00; /* Yellow on white */
+}
+.impact-section p {
+    color: #ffffff; /* Slightly darker gray on white */
+}
+        /* Image slider in the vision section */
+        .vision-section .image-slider {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            margin: 20px auto;
+            border: 3px solid #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .vision-section .image-slider img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .vision-section .image-slider img:nth-child(1) {
+            opacity: 1;
+            animation: fade 6s infinite;
+        }
+
+        .vision-section .image-slider img:nth-child(2) {
+            animation: fade 6s infinite 3s;
+        }
+
+        @keyframes fade {
+            0% { opacity: 0; }
+            33% { opacity: 1; }
+            66% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* New ASL Section */
+        .asl-section {
+            background: #109997; /* Light bluish color */
+            padding: 50px 20px;
+            border-color: black;
+            margin: 0 auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .asl-section h2 {
+            font-size: 36px;
+            font-weight: 600;
+            color: #49bcd3; /* Matches the nav box color for consistency */
+            margin-bottom: 30px;
+        }
+
+        .asl-section p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .asl-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .asl-gallery img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border: 3px solid #000000;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .asl-gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer container for inline About and Contact */
+        .footer-container {
+            display: flex;
+            border-radius: 40px;
+            border-color: #000000;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        /* About Us section (black background, yellow text) */
+        .footer {
+            background: #000000;
+            color: #ffff00;
+            padding: 30px;
+            border-color: #000000;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 300px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer h2 {
+            color: #ffff00;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .footer p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Contact Us section (yellow background, black text) */
+        .footer1 {
+            background: #ffff00;
+            color: #000000;
+            padding: 30px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 300px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer1 h3 {
+            color: #000000;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .footer1 p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .impact-image {
+    text-align: center;  /* Centers the image */
+    margin-top: 20px;    /* Adds space after paragraphs */
+}
+
+/* Add this to your existing <style> section */
+    .impact-section .centered-image {
+    display: block;
+    margin: 20px auto; /* Centers the image horizontally and adds vertical spacing */
+    max-width: 100%; /* Ensures it doesn't overflow */
+    height: auto; /* Maintains aspect ratio */
+    border-radius: 10px; /* Optional: matches other styles */
+}
+
+
+        /* Responsive design: Stack columns and footers on smaller screens */
+        @media (max-width: 768px) {
+            .content-container {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .column {
+                min-width: 100%;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .footer, .footer1 {
+                min-width: 100%;
+            }
+
+            .vision-section .image-slider {
+                max-width: 100%;
+                height: 150px;
+            }
+
+            .asl-section {
+                padding: 30px 15px;
+            }
+
+            .asl-section h2 {
+                font-size: 28px;
+            }
+
+            .asl-gallery img {
+                width: 150px;
+                height: 150px;
+            }
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="thin.jpg" alt="Logo" class="logo-image">
+        <div class="logo">The Hearing .in</div>
+        <div class="links">
+            <a href="#about">ABOUT</a>
+            <a href="#contact">CONTACT</a>
+        </div>
+    </div>
+
+    <div class="nav" id="nav-box">
+        <button onclick="location.href='voice_to_text.html'">Voice to Sign</button>
+        <button onclick="location.href='sign_to_voice.html'">Sign to Voice</button>
+    </div>
+
+    <!-- Two-column content section -->
+    <div class="content-container">
+        <!-- Left Column -->
+        <div class="column">
+            <div class="vision-section">
+                <h2>Introduction to Sign Language</h2>
+                <p>Sign Language is a visual language that uses gestures, facial expressions, and body movements to communicate, especially for the deaf and hard-of-hearing communities. It serves as a bridge for effective communication and cultural exchange.</p>
+                <p>By leveraging AI and machine learning, we are developing tools to enhance accessibility and break down communication barriers for these communities. To learn more about Sign Language, check out the video below:</p>
+
+                <div class="image-slider">
+                    <img src="intro3.jpg" alt="Sign Language Image 1">
+                    <img src="intro2.jpg" alt="Sign Language Image 2">
+
+                </div>
+            </div>
+
+            <div class="intro-section1">
+                <h2>What Are We Working On</h2>
+                <p>We are working on a product that features both voice-to-sign and sign-to-voice capabilities for users. We are using machine learning models to achieve this and are still in the development process.</p>
+                <p>We are developing an innovative product that enables seamless communication between the deaf and hearing communities through both voice-to-sign and sign-to-voice capabilities. Our system is designed to bridge the gap by converting spoken language into sign language and vice versa, ensuring accessibility and inclusivity for everyone</p>
+                <p>Here's a sneak peek at some of the sign language gestures we're working with:</p>
+                <div class="image-gallery">
+                    <video width="600" controls>
+                        <source src="jatin.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+            
+            
+        </div>
+
+        <!-- Right Column -->
+        <div class="column">
+            <div class="vision-section">
+                <h2>Our Vision</h2>
+               
+                <p>Our vision is to create a world where communication barriers are eliminated for the deaf and hard-of-hearing communities. By leveraging AI and machine learning, we aim to build tools that empower individuals to connect seamlessly, fostering inclusivity and accessibility in every interaction.</p>
+                <p>We envision a future where sign language is universally understood and effortlessly translated, enabling real-time communication between the deaf and hearing communities.</p>
+                <div class="image-slider">
+                    <img src="img1.jpg" alt="Vision Image 1">
+                    <img src="img3.jpg" alt="Vision Image 2">
+                </div>
+            </div>
+
+            <div class="impact-section">
+                <h2>Why Sign Language Matters</h2>
+                <p>Sign Language is more than just a communication tool—it’s a cultural cornerstone for the deaf community. It fosters inclusion, preserves identity, and enables meaningful interactions in a world that often overlooks accessibility.</p>
+                <p><strong>A Language of Identity:</strong> Sign language is deeply rooted in the deaf community’s culture and history. It is not merely a visual representation of spoken words but a fully developed language with its own grammar, syntax, and regional variations.</p>
+                <p><strong>Fostering Inclusion:</strong> By embracing sign language, we create a world where everyone is heard and understood. It ensures that the deaf community can participate equally in education, employment, healthcare, and social interactions without barriers.</p>    
+            
+                <!-- Image placed after paragraphs -->
+                <div class="impact-image">
+                    <img src="test1.jpg" alt="Sign Language Representation" class="centered-image">
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- New ASL Section -->
+    <div class="asl-section">
+        <h2>ASL (American Sign Language)</h2>
+        <p>American Sign Language (ASL) is at the heart of our project, The Hearing .in. As a rich and expressive visual language, ASL empowers millions of deaf and hard-of-hearing individuals in the United States and beyond to communicate effectively. It uses hand gestures, facial expressions, and body movements to convey meaning, fostering a deep sense of community and cultural identity.</p>
+        <p>Our project leverages ASL to bridge communication gaps through innovative AI-driven tools. By converting voice to ASL gestures and vice versa, we aim to make conversations more accessible and inclusive for everyone. Whether you're learning ASL or using it daily, our platform is designed to support seamless interaction, education, and connection.</p>
+        <div class="asl-gallery">
+            <img src="ASL1.jpg" alt="ASL Gesture 1">
+            <img src="ASL2.jpg" alt="ASL Gesture 2">
+            <img src="ASL3.jpg" alt="ASL Gesture 3">
+        </div>
+    </div>
+
+    <!-- Footer container for inline About and Contact -->
+    <div class="footer-container">
+        <div class="footer" id="about">
+            <h2>About Us</h2>
+            <p>We are dedicated to bridging communication gaps for the deaf community using advanced AI technologies. Our mission is to empower individuals with new tools for effective communication.</p>
+        </div>
+
+        <div class="footer1" id="contact">
+            <h3>Contact Us</h3>
+            <p>Email: support@thehearing.in</p>
+            <p>Phone: +91-XXXXXXXXXX</p>
+        </div>
+    </div>
+
+    <script>
+        const navBox = document.getElementById('nav-box');
+        const buttons = navBox.getElementsByTagName('button');
+        const vibrantColors = ['yellow'];
+
+        function changeBackgroundColor() {
+            const randomColor = vibrantColors[Math.floor(Math.random() * vibrantColors.length)];
+            navBox.style.backgroundColor = randomColor;
+
+            if (randomColor === 'black') {
+                for (let button of buttons) {
+                    button.style.backgroundColor = 'yellow';
+                    button.style.color = 'black';
+                }
+            } else {
+                for (let button of buttons) {
+                    button.style.backgroundColor = 'black';
+                    button.style.color = 'white';
+                }
+            }
+        }
+
+        setInterval(changeBackgroundColor, 2000);
+    </script>
+</body>
+</html>
